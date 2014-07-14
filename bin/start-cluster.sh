@@ -22,6 +22,10 @@ if docker ps -a | egrep "hectcastro/riak" >/dev/null; then
   exit 1
 fi
 
+if [ -n "$API_PORT" ] ; then
+  API_PORT="-p=$API_PORT:8080"
+fi
+
 echo
 echo "Bringing up cluster nodes:"
 echo
@@ -36,7 +40,7 @@ do
   else
     docker run -e "DOCKER_RIAK_CS_CLUSTER_SIZE=${DOCKER_RIAK_CS_CLUSTER_SIZE}" \
                -e "DOCKER_RIAK_CS_AUTOMATIC_CLUSTERING=${DOCKER_RIAK_CS_AUTOMATIC_CLUSTERING}" \
-               -P --name "riak-cs${index}" -d hectcastro/riak-cs > /dev/null 2>&1
+               -P "${API_PORT}" --name "riak-cs${index}" -d hectcastro/riak-cs > /dev/null 2>&1
   fi
 
   CONTAINER_ID=$(docker ps | egrep "riak-cs${index}[^/]" | cut -d" " -f1)
