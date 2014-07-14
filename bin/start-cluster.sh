@@ -22,9 +22,7 @@ if docker ps -a | egrep "hectcastro/riak" >/dev/null; then
   exit 1
 fi
 
-if [ -n "$API_PORT" ] ; then
-  API_PORT="-p=$API_PORT:8080"
-fi
+API_PORT="-p=${API_PORT:-8080}:8080"
 
 echo
 echo "Bringing up cluster nodes:"
